@@ -15,13 +15,15 @@ const config = {
   useSystemColorMode: true,
 }
 
-const { Button, Heading, Text, Switch } = chakuraTheme.components
+const { Button, Heading, Text, Switch, FormErrorMessage, FormHelperText } = chakuraTheme.components
 
 const components =  {
     Button,
     Text,
     Heading,
-    Switch
+    Switch,
+    FormErrorMessage,
+    FormHelperText
 }
 
 const theme = extendTheme({ config, styles, components })

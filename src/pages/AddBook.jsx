@@ -1,12 +1,13 @@
 import React from 'react';
 import BookForm from '../components/BookForm';
+import { Heading, Stack } from '@chakra-ui/react';
 
 const AddBook = () => {
   return (
-    <div>
-      <h1>Add a New Book</h1>
+    <Stack>
+      <Heading as='h2' size='xl' style={{ marginTop: '8px', marginBottom: '8px' }}>Add a New Book</Heading>
       <BookForm />
-    </div>
+    </Stack>
   );
 }
 
