@@ -7,14 +7,17 @@ import App from './App.jsx'
 import { BookProvider } from './contexts/BookContext.jsx'
 import Header from './components/Header.jsx'
 import theme from './theme.js';
+import { BrowserRouter } from 'react-router-dom'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <BookProvider>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <Header />
-        <App />
+        <BrowserRouter>
+          <Header />
+          <App />
+        </BrowserRouter>
       </BookProvider>
     </ChakraProvider>
   </React.StrictMode>,
