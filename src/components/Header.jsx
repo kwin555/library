@@ -18,8 +18,25 @@ const Header = () => {
       height='60px'
       padding='8px'
       zIndex='1000'
+      data-testid='header'
     >
-      <Link to='/' as={RouterLink} textColor={textColor}><Heading aria-label="Library" tabIndex='0' as='h2' size='2xl'>Library</Heading></Link>
+      <Link 
+        to='/' 
+        as={RouterLink} 
+        textColor={textColor} 
+        aria-label="Library Home"
+        data-testid='home-link'
+      >
+        <Heading 
+          aria-label="Library" 
+          tabIndex='0' 
+          as='h2' 
+          size='2xl'
+          data-testid='heading'
+        >
+          Library
+        </Heading>
+      </Link>
       <ThemeToggleButton />
     </Stack>
   );

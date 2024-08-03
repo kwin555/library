@@ -28,25 +28,32 @@ const BookForm = ({ bookId }) => {
   }, [bookId, books, setValue]);
 
   const onSubmit = (data) => {
+    const bookData = { ...data, year: parseInt(data.year, 10) };
     if (bookId) {
-      dispatch({ type: 'UPDATE_BOOK', payload: { ...data, id: parseInt(bookId) } });
+      dispatch({ type: 'UPDATE_BOOK', payload: { ...bookData, id: parseInt(bookId) } });
     } else {
-      dispatch({ type: 'ADD_BOOK', payload: { ...data, id: Date.now() } });
+      dispatch({ type: 'ADD_BOOK', payload: { ...bookData, id: Date.now() } });
     }
     navigate('/');
   };
 
   return (
-    <FormControl as="form" onSubmit={handleSubmit(onSubmit)} isInvalid={Object.values(errors).some(err => err.message.length > 0)}>
+    <FormControl 
+      as="form" 
+      onSubmit={handleSubmit(onSubmit)} 
+      isInvalid={Object.values(errors).some(err => err.message.length > 0)}
+      data-testid="book-form"
+    >
       <Stack marginInline="12px">
         <FormLabel>Title</FormLabel>
         <Input
           type="text"
           {...register('title', { required: 'Title is required' })}
           isInvalid={!!errors.title}
+          data-testid="input-title"
         />
         {errors.title ? (
-          <FormErrorMessage>{errors.title.message}</FormErrorMessage>
+          <FormErrorMessage data-testid="error-title">{errors.title.message}</FormErrorMessage>
         ) : (
           <FormHelperText style={{ display: 'flex', justifyContent: 'start', marginBottom: '12px' }}>
             Enter the title for your book.
@@ -59,9 +66,10 @@ const BookForm = ({ bookId }) => {
           type="text"
           {...register('author', { required: 'Author is required' })}
           isInvalid={!!errors.author}
+          data-testid="input-author"
         />
         {errors.author ? (
-          <FormErrorMessage>{errors.author.message}</FormErrorMessage>
+          <FormErrorMessage data-testid="error-author">{errors.author.message}</FormErrorMessage>
         ) : (
           <FormHelperText style={{ display: 'flex', justifyContent: 'start', marginBottom: '12px' }}>
             Enter the author for your book.
@@ -74,9 +82,10 @@ const BookForm = ({ bookId }) => {
           type="number"
           {...register('year', { required: 'Year Published is required' })}
           isInvalid={!!errors.year}
+          data-testid="input-year"
         />
         {errors.year ? (
-          <FormErrorMessage>{errors.year.message}</FormErrorMessage>
+          <FormErrorMessage data-testid="error-year">{errors.year.message}</FormErrorMessage>
         ) : (
           <FormHelperText style={{ display: 'flex', justifyContent: 'start', marginBottom: '12px' }}>
             Enter the year for your book.
@@ -89,16 +98,22 @@ const BookForm = ({ bookId }) => {
           type="text"
           {...register('genre', { required: 'Genre is required' })}
           isInvalid={!!errors.genre}
+          data-testid="input-genre"
         />
         {errors.genre ? (
-          <FormErrorMessage>{errors.genre.message}</FormErrorMessage>
+          <FormErrorMessage data-testid="error-genre">{errors.genre.message}</FormErrorMessage>
         ) : (
           <FormHelperText style={{ display: 'flex', justifyContent: 'start', marginBottom: '12px' }}>
             Enter the genre for your book.
           </FormHelperText>
         )}
       </Stack>
-      <Button marginTop="12px" type="submit" isLoading={isSubmitting}>
+      <Button 
+        marginTop="12px" 
+        type="submit" 
+        isLoading={isSubmitting}
+        data-testid="submit-button"
+      >
         {bookId ? 'Update' : 'Add'} Book
       </Button>
     </FormControl>
