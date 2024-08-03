@@ -1,13 +1,13 @@
 import React, { createContext, useReducer, useContext } from 'react';
 
-const BookContext = createContext();
+export const BookContext = createContext();
 
-const initialBooks = [
+export const initialBooks = [
   { id: 1, title: '1984', author: 'George Orwell', year: '1949', genre: 'Dystopian' },
   { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee', year: '1960', genre: 'Fiction' },
 ];
 
-const bookReducer = (state, action) => {
+export const bookReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_BOOK':
       return [...state, action.payload];
