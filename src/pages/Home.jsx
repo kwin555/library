@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <VStack height='100%'>
       <BookList />
-      <Button onClick={() => navigate('/add-book')}>Add New Book</Button>
+      <Button data-testid='home-add-button' onClick={() => navigate('/add-book')}>Add New Book</Button>
     </VStack>
   )
 }
