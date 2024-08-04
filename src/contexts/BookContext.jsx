@@ -9,6 +9,8 @@ export const initialBooks = [
 
 export const bookReducer = (state, action) => {
   switch (action.type) {
+    case 'SET_BOOKS':
+      return action.payload;
     case 'ADD_BOOK':
       return [...state, action.payload];
     case 'UPDATE_BOOK':
@@ -21,7 +23,7 @@ export const bookReducer = (state, action) => {
 };
 
 export const BookProvider = ({ children }) => {
-  const [books, dispatch] = useReducer(bookReducer, initialBooks);
+  const [books, dispatch] = useReducer(bookReducer, []);
 
   return (
     <BookContext.Provider value={{ books, dispatch }}>
