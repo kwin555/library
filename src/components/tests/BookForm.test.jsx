@@ -20,9 +20,9 @@ const renderBookForm = (bookId = null) => {
     <ChakraProvider>
       <Router>
         <ErrorProvider>
-        <BookProvider>
-          <BookForm bookId={bookId} />
-        </BookProvider>
+          <BookProvider>
+            <BookForm bookId={bookId} />
+          </BookProvider>
         </ErrorProvider>
       </Router>
     </ChakraProvider>

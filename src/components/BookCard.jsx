@@ -7,6 +7,7 @@ import { deleteBook } from '../api/api'
 import { useError } from '../contexts/ErrorContext'
 
 const BookCard = ({ book }) => {
+  console.log(book)
   const { dispatch } = useBookContext()
   const { isOpen, onOpen, onClose } = useDisclosure()
 

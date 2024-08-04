@@ -28,11 +28,10 @@ const renderBookCard = () => {
     <ChakraProvider>
       <Router>
         <ErrorProvider>
-        <BookProvider>
-          <BookCard book={book} />
-        </BookProvider>
+          <BookProvider>
+            <BookCard book={book} />
+          </BookProvider>
         </ErrorProvider>
-
       </Router>
     </ChakraProvider>
   )

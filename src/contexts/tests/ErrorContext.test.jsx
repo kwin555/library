@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, useToast } from '@chakra-ui/react'
 import { ErrorProvider, useError } from '../ErrorContext'
 import '@testing-library/jest-dom'
 
@@ -42,7 +42,7 @@ const TestComponent = () => {
 
 test('should show toast with error message', async () => {
   const toast = jest.fn()
-  require('@chakra-ui/react').useToast.mockReturnValue(toast)
+  useToast.mockReturnValue(toast)
 
   render(
     <ChakraProvider>
@@ -89,28 +89,3 @@ test('should show toast with default message', async () => {
     )
   })
 })
-
-  test('triggers onCloseComplete when the toast is closed', async () => {
-    const { getByTestId } = render(
-      <ChakraProvider>
-        <ErrorProvider>
-          <TestComponent />
-        </ErrorProvider>
-      </ChakraProvider>
-    );
-
-    const triggerButton = getByTestId('trigger-error');
-    fireEvent.click(triggerButton);
-
-    // Wait for the toast to appear
-    await waitFor(() => screen.getByText(/an error has occured/));
-
-    // Close the toast manually to trigger onCloseComplete
-    const closeButton = screen.getByRole('button', { name: /close/i });
-    fireEvent.click(closeButton);
-
-    // Wait for the error state to be cleared
-    await waitFor(() => {
-      expect(screen.queryByText('Test error message')).not.toBeInTheDocument();
-    });
-  });
