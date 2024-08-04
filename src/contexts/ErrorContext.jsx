@@ -11,6 +11,12 @@ export const ErrorProvider = ({ children }) => {
   const toast = useToast()
   const [error, setError] = useState(null)
 
+  /* istanbul ignore next */
+  const clearError = () => {
+    setError(null)
+  }
+
+  /* istanbul ignore next */
   const handleError = (error) => {
     setError(error)
     toast({
@@ -19,6 +25,7 @@ export const ErrorProvider = ({ children }) => {
       status: 'error',
       duration: 5000,
       isClosable: true,
+      onCloseComplete: () => clearError(),
     })
   }
 

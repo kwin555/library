@@ -6,6 +6,7 @@ import axios from 'axios'
 import BookCard from '../BookCard'
 import { BookProvider } from '../../contexts/BookContext'
 import { ChakraProvider } from '@chakra-ui/react'
+import { ErrorProvider } from '../../contexts/ErrorContext'
 
 jest.mock('axios')
 
@@ -26,9 +27,12 @@ const renderBookCard = () => {
   return render(
     <ChakraProvider>
       <Router>
+        <ErrorProvider>
         <BookProvider>
           <BookCard book={book} />
         </BookProvider>
+        </ErrorProvider>
+
       </Router>
     </ChakraProvider>
   )

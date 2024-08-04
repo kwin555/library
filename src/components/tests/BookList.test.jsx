@@ -9,6 +9,7 @@ import BookList from '../BookList'
 import axios from 'axios'
 import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter } from 'react-router-dom'
+import { ErrorProvider } from '../../contexts/ErrorContext'
 
 jest.mock('axios')
 
@@ -36,9 +37,11 @@ describe('BookList', () => {
     render(
       <BrowserRouter>
         <ChakraProvider>
+            <ErrorProvider>
           <BookProvider>
             <BookList />
           </BookProvider>
+          </ErrorProvider>
         </ChakraProvider>
       </BrowserRouter>
     )
@@ -77,9 +80,11 @@ describe('BookList', () => {
     render(
       <BrowserRouter>
         <ChakraProvider>
+        <ErrorProvider>
           <BookProvider2>
             <BookList />
           </BookProvider2>
+          </ErrorProvider>
         </ChakraProvider>
       </BrowserRouter>
     )
