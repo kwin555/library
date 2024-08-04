@@ -3,9 +3,11 @@ import { useBookContext } from '../contexts/BookContext'
 import BookCard from './BookCard'
 import { Stack } from '@chakra-ui/react'
 import { getBooks } from '../api/api'
+import { useError } from '../contexts/ErrorContext'
 
 const BookList = () => {
   const { books, dispatch } = useBookContext()
+  const { handleError } = useError()
 
   const fetchBooks = async () => {
     if (books.length === 0) {
@@ -14,7 +16,7 @@ const BookList = () => {
         console.log(resp)
         dispatch({ type: 'SET_BOOKS', payload: resp })
       } catch (err) {
-        console.error(err)
+        handleError(err)
       }
     }
   }

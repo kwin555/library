@@ -4,12 +4,14 @@ import { useBookContext } from '../contexts/BookContext'
 import { Button, Stack, Text, useDisclosure, Box } from '@chakra-ui/react'
 import { ModalWrapper } from './Modal'
 import { deleteBook } from '../api/api'
+import { useError } from '../contexts/ErrorContext'
 
 const BookCard = ({ book }) => {
   const { dispatch } = useBookContext()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const navigate = useNavigate()
+  const { handleError } = useError()
 
   const handleDelete = async () => {
     try {
@@ -17,7 +19,7 @@ const BookCard = ({ book }) => {
       dispatch({ type: 'DELETE_BOOK', payload: book.id })
       onClose()
     } catch (e) {
-      console.log(e)
+      handleError(e)
     }
   }
 

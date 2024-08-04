@@ -12,10 +12,12 @@ import {
   FormHelperText,
 } from '@chakra-ui/react'
 import { addBook, updateBook } from '../api/api'
+import { useError } from '../contexts/ErrorContext'
 
 const BookForm = ({ bookId }) => {
   const navigate = useNavigate()
   const { books, dispatch } = useBookContext()
+  const { handleError } = useError()
 
   const {
     register,
@@ -46,14 +48,14 @@ const BookForm = ({ bookId }) => {
         })
         await updateBook(bookId, { ...bookData, id: parseInt(bookId) })
       } catch (e) {
-        console.log(e)
+        handleError(e)
       }
     } else {
       try {
         dispatch({ type: 'ADD_BOOK', payload: { ...bookData, id: Date.now() } })
         await addBook({ ...bookData, id: Date.now() })
       } catch (e) {
-        console.log(e)
+        handleError(e)
       }
     }
     navigate('/')
