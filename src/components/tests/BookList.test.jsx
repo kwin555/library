@@ -8,10 +8,22 @@ import {
 import BookList from '../BookList'
 import axios from 'axios'
 import { ChakraProvider } from '@chakra-ui/react'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { BrowserRouter } from 'react-router-dom'
 import { ErrorProvider } from '../../contexts/ErrorContext'
 
 jest.mock('axios')
+
+// Mock useVirtualizer hook
+jest.mock('@tanstack/react-virtual', () => ({
+  useVirtualizer: jest.fn(),
+}))
+
+// Mock data for books
+const books = Array.from({ length: 1000 }, (_, i) => ({
+  id: i,
+  title: `Book ${i}`,
+}))
 
 const mockBooks = [
   {
@@ -31,16 +43,34 @@ const mockBooks = [
 ]
 
 describe('BookList', () => {
+  beforeEach(() => {
+    // Mock implementation of useVirtualizer
+    useVirtualizer.mockImplementation(() => ({
+      getVirtualItems: () =>
+        mockBooks.slice(0, mockBooks.length).map((book, index) => ({
+          key: index,
+          index,
+          start: index * 200,
+          size: 200,
+          measureElement: jest.fn(),
+        })),
+      getTotalSize: () => books.length * 200,
+    }))
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
   test('renders a list of books', async () => {
     axios.get.mockResolvedValueOnce({ data: mockBooks })
 
     render(
       <BrowserRouter>
         <ChakraProvider>
-            <ErrorProvider>
-          <BookProvider>
-            <BookList />
-          </BookProvider>
+          <ErrorProvider>
+            <BookProvider>
+              <BookList />
+            </BookProvider>
           </ErrorProvider>
         </ChakraProvider>
       </BrowserRouter>
@@ -80,10 +110,41 @@ describe('BookList', () => {
     render(
       <BrowserRouter>
         <ChakraProvider>
-        <ErrorProvider>
-          <BookProvider2>
-            <BookList />
-          </BookProvider2>
+          <ErrorProvider>
+            <BookProvider2>
+              <BookList />
+            </BookProvider2>
+          </ErrorProvider>
+        </ChakraProvider>
+      </BrowserRouter>
+    )
+
+    // Wait for the books to be fetched and rendered
+    await waitFor(() => {
+      const bookList = screen.getByTestId('book-list')
+      expect(bookList).toBeInTheDocument()
+    })
+  })
+
+  test('renders a list of books === 0', async () => {
+    const BookProvider2 = ({ children }) => {
+      const [books, dispatch] = useReducer(bookReducer, [])
+
+      return (
+        <BookContext.Provider value={{ books, dispatch }}>
+          {children}
+        </BookContext.Provider>
+      )
+    }
+    axios.get.mockResolvedValueOnce({ data: [] })
+
+    render(
+      <BrowserRouter>
+        <ChakraProvider>
+          <ErrorProvider>
+            <BookProvider2>
+              <BookList />
+            </BookProvider2>
           </ErrorProvider>
         </ChakraProvider>
       </BrowserRouter>
