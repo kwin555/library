@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useBookContext } from '../contexts/BookContext';
 import { Button, Stack, Text, useDisclosure, Box } from '@chakra-ui/react';
 import { ModalWrapper } from './Modal';
+import { deleteBook } from '../api/api';
 
 const BookCard = ({ book }) => {
     const { dispatch } = useBookContext();
@@ -10,14 +11,27 @@ const BookCard = ({ book }) => {
 
     const navigate = useNavigate();
 
-    const handleDelete = () => {
-        dispatch({ type: 'DELETE_BOOK', payload: book.id });
-        onClose();
+    const handleDelete = async () => {
+        try {
+            await deleteBook(book.id)
+            dispatch({ type: 'DELETE_BOOK', payload: book.id });
+            onClose();
+        } catch(e) {
+            console.log(e)
+        }
     };
 
     return (
         <Box 
-            as="article" 
+            as="article"
+            display='flex'
+            flexDirection='column'
+            justifyContent='space-between'
+            padding='8px'
+            shadow='md'
+            borderRadius='8px'
+            border='1px solid lightgray'
+            key={book.id}
             width='200px' 
             height='200px' 
             marginBottom='12px' 

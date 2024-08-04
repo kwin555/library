@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useBookContext } from '../contexts/BookContext';
 import { useForm } from 'react-hook-form';
 import { Button, FormControl, FormLabel, Input, Stack, FormErrorMessage, FormHelperText } from '@chakra-ui/react';
+import { addBook, updateBook } from '../api/api';
 
 const BookForm = ({ bookId }) => {
   const navigate = useNavigate();
@@ -27,12 +28,22 @@ const BookForm = ({ bookId }) => {
     }
   }, [bookId, books, setValue]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const bookData = { ...data, year: parseInt(data.year, 10) };
     if (bookId) {
-      dispatch({ type: 'UPDATE_BOOK', payload: { ...bookData, id: parseInt(bookId) } });
+        try {
+            dispatch({ type: 'UPDATE_BOOK', payload: { ...bookData, id: parseInt(bookId) } });
+            await updateBook(bookId, { ...bookData, id: parseInt(bookId) })
+        } catch (e) {
+            console.log(e)
+        }
     } else {
-      dispatch({ type: 'ADD_BOOK', payload: { ...bookData, id: Date.now() } });
+        try {
+            dispatch({ type: 'ADD_BOOK', payload: { ...bookData, id: Date.now() } });
+            await addBook({ ...bookData, id: Date.now() })
+        } catch (e) {
+            console.log(e)
+        }
     }
     navigate('/');
   };

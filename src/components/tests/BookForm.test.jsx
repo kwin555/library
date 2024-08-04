@@ -1,9 +1,12 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import axios from 'axios'
 import { BookProvider } from '../../contexts/BookContext';
 import BookForm from '../BookForm';
 import { ChakraProvider } from '@chakra-ui/react';
+
+jest.mock('axios');
 
 // Mock useNavigate
 jest.mock('react-router-dom', () => ({
@@ -41,7 +44,13 @@ describe('BookForm', () => {
     jest.restoreAllMocks();
   });
 
-  test('renders form with empty fields for new book', () => {
+  test('renders form with empty fields for new book', async() => {
+    const books = [
+        { id: 1, title: '1984', author: 'George Orwell', year: '1949', genre: 'Dystopian' },
+        { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee', year: '1960', genre: 'Fiction' },
+      ];
+
+    axios.get.mockResolvedValueOnce({ data: books });
     renderBookForm();
 
     expect(screen.getByTestId('input-title')).toHaveValue('');
@@ -50,7 +59,13 @@ describe('BookForm', () => {
     expect(screen.getByTestId('input-genre')).toHaveValue('');
   });
 
-  test('renders form with pre-filled fields for editing book', () => {
+  test('renders form with pre-filled fields for editing book', async () => {
+    const books = [
+        { id: 1, title: '1984', author: 'George Orwell', year: '1949', genre: 'Dystopian' },
+        { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee', year: '1960', genre: 'Fiction' },
+      ];
+
+    axios.get.mockResolvedValueOnce({ data: books });
     renderBookForm(1);
 
     expect(screen.getByTestId('input-title')).toHaveValue('Sample Book');
@@ -60,6 +75,12 @@ describe('BookForm', () => {
   });
 
   test('displays error messages for required fields', async () => {
+    const books = [
+        { id: 1, title: '1984', author: 'George Orwell', year: '1949', genre: 'Dystopian' },
+        { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee', year: '1960', genre: 'Fiction' },
+      ];
+
+    axios.get.mockResolvedValueOnce({ data: books });
     renderBookForm();
 
     fireEvent.click(screen.getByTestId('submit-button'));
@@ -73,6 +94,12 @@ describe('BookForm', () => {
   });
 
   test('renders form with empty fields when bookId does not exist', () => {
+    const books = [
+        { id: 1, title: '1984', author: 'George Orwell', year: '1949', genre: 'Dystopian' },
+        { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee', year: '1960', genre: 'Fiction' },
+      ];
+
+    axios.get.mockResolvedValueOnce({ data: books });
     renderBookForm(2);
 
     expect(screen.getByTestId('input-title')).toHaveValue('');
@@ -82,6 +109,19 @@ describe('BookForm', () => {
   });
 
   test('dispatches ADD_BOOK action for new book', async () => {
+    const books = [
+        { id: 1, title: '1984', author: 'George Orwell', year: '1949', genre: 'Dystopian' },
+        { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee', year: '1960', genre: 'Fiction' },
+      ];
+
+    axios.get.mockResolvedValueOnce({ data: books })
+    axios.post.mockResolvedValueOnce({
+        id: expect.any(Number),
+        title: 'New Book',
+        author: 'Jane Doe',
+        year: 2022,
+        genre: 'Science',
+    })
     renderBookForm();
 
     fireEvent.change(screen.getByTestId('input-title'), { target: { value: 'New Book' } });
@@ -106,6 +146,13 @@ describe('BookForm', () => {
   });
 
   test('dispatches UPDATE_BOOK action for existing book', async () => {
+    const books = [
+        { id: 1, title: '1984', author: 'George Orwell', year: '1949', genre: 'Dystopian' },
+        { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee', year: '1960', genre: 'Fiction' },
+      ];
+
+    axios.get.mockResolvedValueOnce({ data: books });
+    axios.put.mockResolvedValueOnce({})
     renderBookForm(1);
 
     fireEvent.change(screen.getByTestId('input-title'), { target: { value: 'Updated Book' } });
