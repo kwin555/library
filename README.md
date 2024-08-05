@@ -30,7 +30,7 @@ This project is a full-stack application to manage a library of books. The front
   - useReducer
 - Backend:
   - Node.js
-  - Express (to be implemented)
+  - Express
 - State Management:
   - Context API
   - useReducer
@@ -63,10 +63,10 @@ yarn
 yarn dev
 ```
 
-### Start the backend server (to be implemented)
+### Start the backend server
 
 ```bash
-npm run start:server
+yarn start
 ```
 
 ### Open the application
