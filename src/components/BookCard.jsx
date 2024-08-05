@@ -31,7 +31,7 @@ const BookCard = ({ book }) => {
       flexDirection='column'
       justifyContent='space-between'
       padding='8px'
-      shadow='md'
+      shadow='rgba(0, 0, 0, 0.24) 0px 3px 8px;'
       borderRadius='8px'
       border='1px solid lightgray'
       key={book.id}
